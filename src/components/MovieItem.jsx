@@ -4,7 +4,7 @@ const MovieItem = (props) => {
     // console.log(props.movie);
     return (
         <div>
-            <li>{props.movie}</li>
+            <ul>{props.movie}</ul>
         </div>
     )
 }
