@@ -24,6 +24,7 @@ class App extends React.Component {
     }
 
     render (){
+        //fix git
         return (
             <div>
                 <SearchBar onFormSubmission={this.onTermSubmit}/>
