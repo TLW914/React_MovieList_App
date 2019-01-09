@@ -1,6 +1,6 @@
 var dataMovies = [
-  {title: 'Mean Girls'},
-  {title: 'Hackers'},
+  {title: 'Mean Girls', status: "Watched"},
+  {title: 'Hackers', status: "To Watch"},
   {title: 'The Grey'},
   {title: 'Sunshine'},
   {title: 'Ex Machina'},

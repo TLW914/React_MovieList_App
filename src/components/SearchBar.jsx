@@ -16,17 +16,21 @@ class SearchBar extends React.Component {
         this.setState({ term: event.target.value });
     }
 
+
+
     render(){
         return (
-            <div className="search-bar ui segment">
+            <div className="ui transparent icon input">
                 <form onSubmit={ this.onFormSubmit } className="ui form">
                     <div className="field">
-                        <label>Search Movies</label>
-                        <input
+                        <input className="search link icon"
                             type="text"
                             value={this.state.term}
                             onChange={this.onInputChange}
+                            placeholder="Search Movies..."
+                            icon="search link icon"
                         ></input>
+                        
                     </div>
                 </form>
     
@@ -34,5 +38,10 @@ class SearchBar extends React.Component {
         );
     }
 }
+
+ {/* <div className="ui transparent icon input">
+                        <input type="text" placeholder="Search Movies..."></input>
+                            <i className="search link icon"></i>
+                </div> */}
 
 export default SearchBar;

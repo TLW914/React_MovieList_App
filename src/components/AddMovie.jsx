@@ -23,11 +23,11 @@ class AddMovie extends React.Component {
 
     render (){
         return (
-            <div className="ui segment">
+            <div className="ui transparent icon input">
                 <form onSubmit={ this.onFormSubmit } className="ui form">
                     <div className="field">
-                        <label>Add Movies</label>
                         <input
+                            placeholder="Add Movie Title Here"
                             type="text"
                             value={this.state.userMovie}
                             onChange={this.onInputChange}

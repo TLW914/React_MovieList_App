@@ -1,10 +1,12 @@
 import React from 'react';
+import MovieCard from './MovieCard.jsx'
 
 const MovieItem = (props) => {
     // console.log(props.movie);
     return (
         <div>
-            <ul>{props.movie}</ul>
+            <MovieCard>{props.movie}</MovieCard>
+            
         </div>
     )
 }
