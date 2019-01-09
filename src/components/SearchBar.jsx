@@ -28,7 +28,6 @@ class SearchBar extends React.Component {
                             value={this.state.term}
                             onChange={this.onInputChange}
                             placeholder="Search Movies..."
-                            icon="search link icon"
                         ></input>
                         
                     </div>

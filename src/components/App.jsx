@@ -3,6 +3,7 @@ import MovieList from './MovieList.jsx';
 import dataMovies from '../data/data.js';
 import SearchBar from './SearchBar.jsx';
 import AddMovie from './AddMovie.jsx';
+import searchMovieDB from '../apis/movieDB.js';
 
 class App extends React.Component {
     constructor (props){
@@ -10,9 +11,6 @@ class App extends React.Component {
 
         this.state = {
             movies: [],
-            watchedMovies: [],
-            moviesToWatch: [],
-            isHidden: false
         };
     }
 
@@ -27,43 +25,65 @@ class App extends React.Component {
       }
 
     onTermSubmit = (term) => {
-        const matches = dataMovies.filter((movie)=>{
-            return movie.title === term;
-        }); 
-        if (!matches.length) {
-            alert('Looks like there\'s no movie by that title on record.\n' +
-             'Please try another search.')
-        } else{
-            this.setState({movies: matches})
-        }
+        // const matches = dataMovies.filter((movie)=>{
+        //     return movie.title === term;
+        // }); 
+        // if (!matches.length) {
+        //     alert('Looks like there\'s no movie by that title on record.\n' +
+        //      'Please try another search.')
+        // } else{
+        //     this.setState({movies: matches})
+        // }
+        var query = term;
+        console.log(term);
+        searchMovieDB(query, (data) => {
+            console.log(data)
+            this.setState({ 
+                movies: data ,
+            });
+        });
+
     }
 
     onAddNewMovie = (userMovie) => {
         const userList = this.state.movies.slice()
         const newMovie = {title: userMovie, key: userMovie, status: "To Watch"};
-        console.log(userList);
         userList.push(newMovie)
         dataMovies.push(newMovie)
         this.setState({movies: userList})
     }
 
     onToggleMovie = () => {
-    
-        console.log();
-        const currentList = dataMovies.filter((movie)=>{
-            return movie.status === event.target.text
-        });
-        this.setState({
-            watchedMovies: currentList,
-            movies: currentList,
-            })
+        if(event.target.text === "All Movies"){
+            var allMovies = [];
+            dataMovies.forEach((movie)=>{
+                allMovies.push(movie);
+            });
+            this.setState({
+                movies: allMovies,
+                });
+        } else {
+            for (var i=0; i<dataMovies.length; i++){
+                if (dataMovies[i].status === event.target.text){
+                    var movieList = dataMovies.filter((movie)=>{
+                        return movie.status === event.target.text
+                    });
+                }
+            }
+            this.setState({
+                movies: movieList,
+                })
+            }
     }
-
+        
     render (){
         return (
             <div className="ui container" style={{marginTop: '10px'}}>
                 <div className="ui top attached tabular menu">
-                    <a className="item active" onClick={this.onToggleMovie}>
+                <a className="item active" onClick={this.onToggleMovie}>
+                        All Movies
+                    </a>
+                    <a className="item" onClick={this.onToggleMovie}>
                         Watched
                     </a>
                     <a className="item"  onClick={this.onToggleMovie}>
