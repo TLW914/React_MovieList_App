@@ -5,6 +5,7 @@ import SearchBar from './SearchBar.jsx';
 import AddMovie from './AddMovie.jsx';
 import searchMovieDB from '../apis/movieDB.js';
 import searchMovieDBId from '../apis/movieDBId.js';
+import searchMovieDBPopular from '../apis/movieDBPopular';
 
 class App extends React.Component {
     constructor (props){
@@ -18,7 +19,11 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        this.onTermSubmit('Jaws')
+        searchMovieDBPopular((data)=>{
+            this.setState({
+                movies: data
+              })
+        });
     }
 
     toggleHidden = () => {
@@ -49,8 +54,20 @@ class App extends React.Component {
     }
 
     onAddMovieToList = (id) => {
-        dataMovies.toWatch.push(event.target.id)
-        console.log('from the movieItem', dataMovies.toWatch)
+        if(dataMovies.toWatch.length > 0){
+            for (var i=0; i<dataMovies.toWatch.length; i++){
+                if (dataMovies.toWatch[i] === event.target.id){
+                    alert('Movie is already in list');
+                } else {
+                    dataMovies.toWatch.push(event.target.id)
+                }
+            }
+            console.log('from the movieItem', dataMovies.toWatch)
+        } else {
+            dataMovies.toWatch.push(event.target.id)
+        }
+        
+        
     }
 
     onAddNewMovie = (userMovie) => {
@@ -62,24 +79,24 @@ class App extends React.Component {
 
     onToggleMovie = () => {
         if(event.target.text === "Search Movies"){
-            var allMovies = [];
-            dataMovies.forEach((movie)=>{
-                allMovies.push(movie);
+            searchMovieDBPopular((data)=>{
+                this.setState({
+                    movies: data
+                  })
             });
-            this.setState({
-                movies: allMovies,
-                });
         } else {
                 if (event.target.text === "To Watch") {
                     console.log(dataMovies.toWatch)
-                    var movieId = dataMovies.toWatch[0];
-                    searchMovieDBId(movieId, (data) => {
-                        this.setState({ 
-                            movies: [data] ,
+                    var moviesToSee = [];
+                      dataMovies.toWatch.forEach((movieId)=> {
+                        searchMovieDBId(movieId, (data) => {
+                             moviesToSee.push(data)
+                             this.setState({ 
+                                movies: moviesToSee ,
+                            })
                         });
-                        
-                    });
-                    
+                        console.log("moviestoSee",moviesToSee)
+                    })
                 } 
         }
     }
