@@ -6,6 +6,8 @@ import AddMovie from './AddMovie.jsx';
 import searchMovieDB from '../apis/movieDB.js';
 import searchMovieDBId from '../apis/movieDBId.js';
 import searchMovieDBPopular from '../apis/movieDBPopular';
+import _ from 'lodash';
+
 
 class App extends React.Component {
     constructor (props){
@@ -22,26 +24,17 @@ class App extends React.Component {
         searchMovieDBPopular((data)=>{
             this.setState({
                 movies: data
-              })
+              });
         });
     }
 
     toggleHidden = () => {
         this.setState({
           isHidden: true
-        })
+        });
       }
 
     onTermSubmit = (term) => {
-        // const matches = dataMovies.filter((movie)=>{
-        //     return movie.title === term;
-        // }); 
-        // if (!matches.length) {
-        //     alert('Looks like there\'s no movie by that title on record.\n' +
-        //      'Please try another search.')
-        // } else{
-        //     this.setState({movies: matches})
-        // }
         var query = term;
         console.log(term);
         searchMovieDB(query, (data) => {
@@ -50,24 +43,14 @@ class App extends React.Component {
                 movies: data ,
             });
         });
-
     }
 
-    onAddMovieToList = (id) => {
-        if(dataMovies.toWatch.length > 0){
-            for (var i=0; i<dataMovies.toWatch.length; i++){
-                if (dataMovies.toWatch[i] === event.target.id){
-                    alert('Movie is already in list');
-                } else {
-                    dataMovies.toWatch.push(event.target.id)
-                }
-            }
-            console.log('from the movieItem', dataMovies.toWatch)
-        } else {
+    onAddMovieToWatchList = (id) => {
             dataMovies.toWatch.push(event.target.id)
-        }
-        
-        
+    }
+
+    onAddMovieToWatchedList = (id) => {
+            dataMovies.watched.push(event.target.id)
     }
 
     onAddNewMovie = (userMovie) => {
@@ -82,24 +65,35 @@ class App extends React.Component {
             searchMovieDBPopular((data)=>{
                 this.setState({
                     movies: data
-                  })
+                  });
             });
-        } else {
-                if (event.target.text === "To Watch") {
-                    console.log(dataMovies.toWatch)
-                    var moviesToSee = [];
-                      dataMovies.toWatch.forEach((movieId)=> {
-                        searchMovieDBId(movieId, (data) => {
-                             moviesToSee.push(data)
-                             this.setState({ 
+        } else if (event.target.text === "To Watch") {
+                console.log(dataMovies.toWatch)
+                var moviesToSee = [];
+                var movieList = _.uniq(dataMovies.toWatch);
+                _.forEach(movieList, ((movieId)=> {
+                    searchMovieDBId(movieId, (data) => {
+                        moviesToSee.push(data)
+                            this.setState({ 
                                 movies: moviesToSee ,
-                            })
+                            });
                         });
                         console.log("moviestoSee",moviesToSee)
-                    })
-                } 
+                    }));
+        } else if (event.target.text === "Watched"){
+            var seenMovies = [];
+            var moviesSeen = _.uniq(dataMovies.watched);
+            _.forEach(moviesSeen, ((movieId)=> {
+                    searchMovieDBId(movieId, (data) => {
+                        seenMovies.push(data)
+                             this.setState({ 
+                                movies: seenMovies ,
+                            });
+                        });
+                        console.log("movies ive seen",seenMovies)
+                    }));
+                }
         }
-    }
 
         
     render (){
@@ -127,7 +121,7 @@ class App extends React.Component {
                     </div>
                 </div>
             <div className="ui bottom attached segment">
-                <MovieList movies={this.state.movies} addMovieToList={this.onAddMovieToList}/>
+                <MovieList movies={this.state.movies} addMovieToWatchList={this.onAddMovieToWatchList} addMovieToWatchedList={this.onAddMovieToWatchedList}/>
             </div>
         </div>
         )

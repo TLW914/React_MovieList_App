@@ -30,6 +30,7 @@
     "file-loader": "^3.0.1",
     "jquery-ajax-request": "0.0.6",
     "react": "^16.6.3",
-    "react-dom": "^16.6.3"
+    "react-dom": "^16.6.3",
+    "lodash": "^3.10.0"
   }
 }

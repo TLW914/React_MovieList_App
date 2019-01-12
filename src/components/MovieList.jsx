@@ -8,7 +8,7 @@ const MovieList = (props) => {
 
     const movieTitle = props.movies.map((movie) => {
         movie.image = "https://image.tmdb.org/t/p/w185" + movie.poster_path;
-        return <MovieItem movie={movie.title} key={movie.id} id={movie.id} image={movie.image} overview={movie.overview} addMovieFromMovieList={props.addMovieToList}/>
+        return <MovieItem movie={movie.title} key={movie.id} id={movie.id} image={movie.image} overview={movie.overview} addToWatchList={props.addMovieToWatchList} addToWatchedList={props.addMovieToWatchedList}/>
     })
 
     return (

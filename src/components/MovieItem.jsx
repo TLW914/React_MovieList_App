@@ -4,11 +4,19 @@ import React from 'react';
 class MovieItem extends React.Component {
     constructor (props){
         super(props)
-        console.log(props)
+        this.state = {
+            
+        }
     }
 
-    addMovieToList = () => {
-        this.props.addMovieFromMovieList(event.target.id);
+    addMovieToWatchList = () => {
+        event.preventDefault();
+        this.props.addToWatchList(event.target.id);
+    }
+
+    addMovieToWatchedList = () => {
+        event.preventDefault();
+        this.props.addToWatchedList(event.target.id);
     }
 
     render(){
@@ -24,9 +32,9 @@ class MovieItem extends React.Component {
                     </div>
                     <div className="extra content">
                         <div className="ui buttons right floated">
-                            <button className="ui button">Watched</button>
+                            <button className="ui button" id={this.props.id} onClick={this.addMovieToWatchedList}>Watched</button>
                             <div className="or"></div>
-                            <button className="ui positive button" id={this.props.id} onClick={this.addMovieToList}>Save</button>
+                            <button className="ui positive button" id={this.props.id} onClick={this.addMovieToWatchList}>Save</button>
                         </div>
                     </div>
                 </div>
