@@ -1,14 +1,39 @@
 import React from 'react';
-import MovieCard from './MovieCard.jsx'
+//import MovieCard from './MovieCard.jsx'
 
-const MovieItem = (props) => {
-    // console.log(props.movie);
-    return (
-        <div>
-            <MovieCard>{props.movie}</MovieCard>
-            
-        </div>
-    )
+class MovieItem extends React.Component {
+    constructor (props){
+        super(props)
+        console.log(props)
+    }
+
+    addMovieToList = () => {
+        this.props.addMovieFromMovieList(event.target.id);
+    }
+
+    render(){
+        return (
+            <div>
+                <div className = "ui card" style={{width: "100%"}}>
+                    <div id={this.props.id} className="header">
+                    <h2>{this.props.movie}</h2>
+                    </div>
+                    <div className="content" style={{display:"inlineBlock"}}>
+                        <img style={{size: '10px', float:"left", marginRight: "10px"}} src={this.props.image}></img>
+                        <p style={{display:"inlineBlock", marginRight: "10px"}}>{this.props.overview}</p>
+                    </div>
+                    <div className="extra content">
+                        <div className="ui buttons right floated">
+                            <button className="ui button">Watched</button>
+                            <div className="or"></div>
+                            <button className="ui positive button" id={this.props.id} onClick={this.addMovieToList}>Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+    
 }
 
 export default MovieItem;

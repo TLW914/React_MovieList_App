@@ -18,7 +18,3 @@ var searchMovieDB = (query, callback) => {
 }
 
 export default searchMovieDB;
-
-
-
-

@@ -4,6 +4,7 @@ import dataMovies from '../data/data.js';
 import SearchBar from './SearchBar.jsx';
 import AddMovie from './AddMovie.jsx';
 import searchMovieDB from '../apis/movieDB.js';
+import searchMovieDBId from '../apis/movieDBId.js';
 
 class App extends React.Component {
     constructor (props){
@@ -11,11 +12,13 @@ class App extends React.Component {
 
         this.state = {
             movies: [],
+            watchedMovies: [],
+            myQueue: []
         };
     }
 
     componentDidMount() {
-        this.setState({movies: dataMovies})
+        this.onTermSubmit('Jaws')
     }
 
     toggleHidden = () => {
@@ -45,8 +48,12 @@ class App extends React.Component {
 
     }
 
+    onAddMovieToList = (id) => {
+        dataMovies.toWatch.push(event.target.id)
+        console.log('from the movieItem', dataMovies.toWatch)
+    }
+
     onAddNewMovie = (userMovie) => {
-        const userList = this.state.movies.slice()
         const newMovie = {title: userMovie, key: userMovie, status: "To Watch"};
         userList.push(newMovie)
         dataMovies.push(newMovie)
@@ -54,7 +61,7 @@ class App extends React.Component {
     }
 
     onToggleMovie = () => {
-        if(event.target.text === "All Movies"){
+        if(event.target.text === "Search Movies"){
             var allMovies = [];
             dataMovies.forEach((movie)=>{
                 allMovies.push(movie);
@@ -63,25 +70,27 @@ class App extends React.Component {
                 movies: allMovies,
                 });
         } else {
-            for (var i=0; i<dataMovies.length; i++){
-                if (dataMovies[i].status === event.target.text){
-                    var movieList = dataMovies.filter((movie)=>{
-                        return movie.status === event.target.text
+                if (event.target.text === "To Watch") {
+                    console.log(dataMovies.toWatch)
+                    var movieId = dataMovies.toWatch[0];
+                    searchMovieDBId(movieId, (data) => {
+                        this.setState({ 
+                            movies: [data] ,
+                        });
+                        
                     });
-                }
-            }
-            this.setState({
-                movies: movieList,
-                })
-            }
+                    
+                } 
+        }
     }
+
         
     render (){
         return (
             <div className="ui container" style={{marginTop: '10px'}}>
                 <div className="ui top attached tabular menu">
                 <a className="item active" onClick={this.onToggleMovie}>
-                        All Movies
+                        Search Movies
                     </a>
                     <a className="item" onClick={this.onToggleMovie}>
                         Watched
@@ -101,7 +110,7 @@ class App extends React.Component {
                     </div>
                 </div>
             <div className="ui bottom attached segment">
-                <MovieList movies={this.state.movies} />
+                <MovieList movies={this.state.movies} addMovieToList={this.onAddMovieToList}/>
             </div>
         </div>
         )

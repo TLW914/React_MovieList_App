@@ -4,12 +4,16 @@ class SearchBar extends React.Component {
     state = {
         term: ''
     }
+
+    clearform = () => 
+        this.setState({term: ''})
     
     onFormSubmit = (event) => {
         event.preventDefault();
         console.log("term in serch component", this.state.term)
 
         this.props.onFormSubmission(this.state.term);
+        this.clearform();
     };
     
     onInputChange = (event)=>{
